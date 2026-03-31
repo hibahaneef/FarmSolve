@@ -1,0 +1,5 @@
+{
+  "name": "farmsolve",
+  "description": "Smart Farming Decision Assistant providing AI-powered crop selection, irrigation advice, and disease diagnosis.",
+  "requestFramePermissions": ["geolocation"]
+}

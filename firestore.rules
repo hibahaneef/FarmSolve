@@ -1,0 +1,134 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: userId (UID)
+    // Fields:
+    //   - uid: string (required, immutable) - The unique identifier for the user.
+    //   - displayName: string (optional) - The user's display name.
+    //   - email: string (required, immutable) - The user's email address.
+    //   - photoURL: string (optional) - The user's profile photo URL.
+    //   - createdAt: timestamp (required, immutable) - When the profile was created.
+    //
+    // Collection: plans
+    // Document ID: planId (auto-generated)
+    // Fields:
+    //   - uid: string (required, immutable) - The user who saved this plan.
+    //   - location: string (required) - The farming location.
+    //   - bestCrop: string (required) - The recommended crop.
+    //   - farmingPlan: string (required) - The detailed plan.
+    //   - sevenDayActionPlan: list (required) - The 7-day action plan.
+    //   - commonMistakes: list (required) - Common mistakes.
+    //   - createdAt: timestamp (required, immutable) - When the plan was saved.
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isDocOwner() {
+      return isAuthenticated() && request.auth.uid == resource.data.uid;
+    }
+
+    function uidUnchanged() {
+      return !('uid' in request.resource.data) || request.resource.data.uid == request.auth.uid;
+    }
+
+    function uidNotModified() {
+      return !('uid' in request.resource.data) || request.resource.data.uid == resource.data.uid;
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isValidUrl(url) {
+      return url is string && (url.matches("^https://.*") || url.matches("^http://.*"));
+    }
+
+    function isValidString(field, minLen, maxLen) {
+      return request.resource.data[field] is string && 
+             request.resource.data[field].size() >= minLen && 
+             request.resource.data[field].size() <= maxLen;
+    }
+
+    function isValidList(field, maxItems) {
+      return request.resource.data[field] is list && request.resource.data[field].size() <= maxItems;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "hibahaneef446@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    function isValidUser(data) {
+      return hasRequiredFields(['uid', 'email', 'createdAt']) &&
+             hasOnlyAllowedFields(['uid', 'displayName', 'email', 'photoURL', 'createdAt', 'role']) &&
+             data.uid == request.auth.uid &&
+             isValidEmail(data.email) &&
+             (data.role == 'user' || isAdmin()) &&
+             data.createdAt is timestamp;
+    }
+
+    function isValidPlan(data) {
+      return hasRequiredFields(['uid', 'location', 'bestCrop', 'farmingPlan', 'sevenDayActionPlan', 'commonMistakes', 'createdAt']) &&
+             hasOnlyAllowedFields(['uid', 'location', 'bestCrop', 'farmingPlan', 'sevenDayActionPlan', 'commonMistakes', 'createdAt']) &&
+             data.uid == request.auth.uid &&
+             data.location is string && data.location.size() < 500 &&
+             data.bestCrop is string && data.bestCrop.size() < 200 &&
+             data.farmingPlan is string && data.farmingPlan.size() < 20000 &&
+             data.sevenDayActionPlan is list && data.sevenDayActionPlan.size() <= 14 &&
+             data.commonMistakes is list && data.commonMistakes.size() <= 20 &&
+             data.createdAt is timestamp;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) && isValidUser(request.resource.data);
+      allow update: if isOwner(userId) && isValidUser(request.resource.data) && uidNotModified() && request.resource.data.email == resource.data.email && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if isAdmin();
+    }
+
+    match /plans/{planId} {
+      allow read: if isDocOwner() || isAdmin();
+      allow create: if isAuthenticated() && isValidPlan(request.resource.data);
+      allow update: if isDocOwner() && isValidPlan(request.resource.data) && uidNotModified() && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if isDocOwner() || isAdmin();
+    }
+
+    match /{path=**} {
+      allow read, write: if false;
+    }
+  }
+}
