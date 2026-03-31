@@ -211,15 +211,15 @@ export default function MapPicker({ isOpen, onClose, onSelect }: MapPickerProps)
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col h-[80vh]"
+        className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col h-[90vh] md:h-[80vh]"
       >
-        <div className="p-6 border-b border-stone-100 flex items-center justify-between bg-white">
+        <div className="p-4 md:p-6 border-b border-stone-100 flex items-center justify-between bg-white shrink-0">
           <div>
-            <h3 className="text-xl font-bold text-stone-900 flex items-center gap-2">
-              <MapPin className="text-emerald-600" />
-              Select Your Farm Location
+            <h3 className="text-lg md:text-xl font-bold text-stone-900 flex items-center gap-2">
+              <MapPin className="text-emerald-600" size={20} />
+              Select Farm Location
             </h3>
-            <p className="text-stone-500 text-sm">Search or click on the map to mark your land</p>
+            <p className="text-stone-500 text-xs md:text-sm">Search or click on the map</p>
           </div>
           <button
             onClick={onClose}
@@ -229,18 +229,18 @@ export default function MapPicker({ isOpen, onClose, onSelect }: MapPickerProps)
           </button>
         </div>
 
-        <div className="flex-1 relative flex flex-col">
+        <div className="flex-1 relative flex flex-col min-h-0">
           {/* Search Bar */}
-          <div className="absolute top-4 left-4 right-4 z-[1000] max-w-md mx-auto">
+          <div className="absolute top-3 left-3 right-3 z-[1000] max-w-md mx-auto">
             <form onSubmit={handleSearch} className="relative">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search for a village, district or state..."
-                className="w-full p-4 pl-12 pr-24 rounded-2xl shadow-xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none bg-white/95 backdrop-blur-sm"
+                placeholder="Search location..."
+                className="w-full p-3.5 md:p-4 pl-10 md:pl-12 pr-20 md:pr-24 rounded-2xl shadow-xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none bg-white/95 backdrop-blur-sm text-sm md:text-base"
               />
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={20} />
+              <Search className="absolute left-3.5 md:left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
               <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
                 {searchQuery && (
                   <button
@@ -330,14 +330,14 @@ export default function MapPicker({ isOpen, onClose, onSelect }: MapPickerProps)
                 );
               }
             }}
-            className="absolute bottom-6 right-6 z-[1000] p-4 bg-white text-emerald-600 rounded-2xl shadow-2xl hover:bg-stone-50 transition-all border border-stone-100 flex items-center gap-2 font-bold"
+            className="absolute bottom-4 right-4 md:bottom-6 md:right-6 z-[1000] p-3 md:p-4 bg-white text-emerald-600 rounded-2xl shadow-2xl hover:bg-stone-50 transition-all border border-stone-100 flex items-center gap-2 font-bold text-xs md:text-sm"
           >
-            <MapPin size={20} />
+            <MapPin size={18} />
             Locate Me
           </button>
           
           {loading && (
-            <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] z-[1000] flex items-center justify-center">
+            <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] z-[1000] flex items-center justify-center p-4">
               <div className="bg-white p-6 rounded-2xl shadow-xl flex flex-col items-center gap-4 max-w-xs text-center">
                 <Loader2 className="animate-spin text-emerald-600" size={32} />
                 <div>
@@ -349,32 +349,32 @@ export default function MapPicker({ isOpen, onClose, onSelect }: MapPickerProps)
           )}
         </div>
 
-        <div className="p-6 bg-stone-50 border-t border-stone-100 flex items-center justify-between">
-          <div className="flex-1 mr-4">
+        <div className="p-4 md:p-6 bg-stone-50 border-t border-stone-100 flex flex-col sm:flex-row items-center justify-between gap-4 shrink-0">
+          <div className="w-full sm:flex-1">
             {error ? (
-              <p className="text-red-500 text-sm font-medium">{error}</p>
+              <p className="text-red-500 text-xs md:text-sm font-medium text-center sm:text-left">{error}</p>
             ) : position ? (
-              <p className="text-stone-600 text-sm">
+              <p className="text-stone-600 text-xs md:text-sm text-center sm:text-left">
                 Coordinates: <span className="font-mono">{position.lat.toFixed(4)}, {position.lng.toFixed(4)}</span>
               </p>
             ) : (
-              <p className="text-stone-400 text-sm italic">No location selected yet</p>
+              <p className="text-stone-400 text-xs md:text-sm italic text-center sm:text-left">No location selected yet</p>
             )}
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-2 w-full sm:w-auto">
             <button
               onClick={onClose}
-              className="px-6 py-3 rounded-xl font-bold text-stone-600 hover:bg-stone-200 transition-colors"
+              className="flex-1 sm:flex-none px-4 md:px-6 py-3 rounded-xl font-bold text-stone-600 hover:bg-stone-200 transition-colors text-sm"
             >
               Cancel
             </button>
             <button
               onClick={handleConfirm}
               disabled={!position || loading}
-              className="px-8 py-3 rounded-xl font-bold text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2 shadow-lg shadow-emerald-100"
+              className="flex-1 sm:flex-none px-6 md:px-8 py-3 rounded-xl font-bold text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-100 text-sm"
             >
-              {loading ? <Loader2 className="animate-spin" size={18} /> : <Check size={18} />}
-              Confirm Location
+              {loading ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} />}
+              Confirm
             </button>
           </div>
         </div>

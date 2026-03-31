@@ -77,8 +77,8 @@ export default function BeginnerGuide() {
   };
 
   return (
-    <div className="space-y-8">
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-3xl shadow-sm border border-stone-200 space-y-8">
+    <div className="space-y-6 md:space-y-8">
+      <form onSubmit={handleSubmit} className="bg-white p-5 sm:p-8 rounded-3xl shadow-sm border border-stone-200 space-y-6 md:space-y-8">
         {error && (
           <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-sm flex items-center gap-2">
             <AlertTriangle size={18} />
@@ -98,22 +98,22 @@ export default function BeginnerGuide() {
 
         <div className="h-px bg-stone-100" />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-10">
-          <div className="space-y-4">
-            <label className="text-xs font-black uppercase tracking-[0.2em] text-stone-400">Land Details</label>
-            <div className="flex gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 md:gap-x-8 gap-y-8 md:gap-y-10">
+          <div className="space-y-3 md:space-y-4">
+            <label className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-stone-400">Land Details</label>
+            <div className="flex gap-2 md:gap-3">
               <input
                 type="number"
                 value={landSize}
                 onChange={(e) => setLandSize(e.target.value)}
                 placeholder="Size"
-                className="flex-1 min-w-0 p-4 rounded-2xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all bg-stone-50 hover:bg-white"
+                className="flex-1 min-w-0 p-3.5 md:p-4 rounded-2xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all bg-stone-50 hover:bg-white text-sm md:text-base"
                 required
               />
               <select
                 value={landUnit}
                 onChange={(e) => setLandUnit(e.target.value)}
-                className="w-32 p-4 rounded-2xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all bg-stone-50 hover:bg-white cursor-pointer shrink-0"
+                className="w-28 md:w-32 p-3.5 md:p-4 rounded-2xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all bg-stone-50 hover:bg-white cursor-pointer shrink-0 text-sm md:text-base"
               >
                 <option value="Acres">Acres</option>
                 <option value="Cents">Cents</option>
@@ -122,12 +122,12 @@ export default function BeginnerGuide() {
             </div>
           </div>
 
-          <div className="space-y-4">
-            <label className="text-xs font-black uppercase tracking-[0.2em] text-stone-400">Soil Type</label>
+          <div className="space-y-3 md:space-y-4">
+            <label className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-stone-400">Soil Type</label>
             <select
               value={soilType}
               onChange={(e) => setSoilType(e.target.value)}
-              className="w-full p-4 rounded-2xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all bg-stone-50 hover:bg-white cursor-pointer"
+              className="w-full p-3.5 md:p-4 rounded-2xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all bg-stone-50 hover:bg-white cursor-pointer text-sm md:text-base"
               required
             >
               <option value="">Select Soil Type...</option>
@@ -140,12 +140,12 @@ export default function BeginnerGuide() {
             </select>
           </div>
 
-          <div className="space-y-4">
-            <label className="text-xs font-black uppercase tracking-[0.2em] text-stone-400">Water Availability</label>
+          <div className="space-y-3 md:space-y-4">
+            <label className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-stone-400">Water Availability</label>
             <select
               value={water}
               onChange={(e) => setWater(e.target.value)}
-              className="w-full p-4 rounded-2xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all bg-stone-50 hover:bg-white cursor-pointer"
+              className="w-full p-3.5 md:p-4 rounded-2xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all bg-stone-50 hover:bg-white cursor-pointer text-sm md:text-base"
               required
             >
               <option value="">Select Availability...</option>
@@ -155,12 +155,12 @@ export default function BeginnerGuide() {
             </select>
           </div>
 
-          <div className="space-y-4">
-            <label className="text-xs font-black uppercase tracking-[0.2em] text-stone-400">Farming Season</label>
+          <div className="space-y-3 md:space-y-4">
+            <label className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-stone-400">Farming Season</label>
             <select
               value={season}
               onChange={(e) => setSeason(e.target.value)}
-              className="w-full p-4 rounded-2xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all bg-stone-50 hover:bg-white cursor-pointer"
+              className="w-full p-3.5 md:p-4 rounded-2xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all bg-stone-50 hover:bg-white cursor-pointer text-sm md:text-base"
               required
             >
               <option value="">Select Season...</option>
@@ -170,12 +170,12 @@ export default function BeginnerGuide() {
             </select>
           </div>
 
-          <div className="space-y-4">
-            <label className="text-xs font-black uppercase tracking-[0.2em] text-stone-400">Budget Range</label>
+          <div className="space-y-3 md:space-y-4">
+            <label className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-stone-400">Budget Range</label>
             <select
               value={budget}
               onChange={(e) => setBudget(e.target.value)}
-              className="w-full p-4 rounded-2xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all bg-stone-50 hover:bg-white cursor-pointer"
+              className="w-full p-3.5 md:p-4 rounded-2xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all bg-stone-50 hover:bg-white cursor-pointer text-sm md:text-base"
               required
             >
               <option value="">Select Budget...</option>
@@ -185,12 +185,12 @@ export default function BeginnerGuide() {
             </select>
           </div>
 
-          <div className="space-y-4">
-            <label className="text-xs font-black uppercase tracking-[0.2em] text-stone-400">Farming Type</label>
+          <div className="space-y-3 md:space-y-4">
+            <label className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-stone-400">Farming Type</label>
             <select
               value={farmingType}
               onChange={(e) => setFarmingType(e.target.value)}
-              className="w-full p-4 rounded-2xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all bg-stone-50 hover:bg-white cursor-pointer"
+              className="w-full p-3.5 md:p-4 rounded-2xl border border-stone-200 focus:ring-2 focus:ring-emerald-500 outline-none transition-all bg-stone-50 hover:bg-white cursor-pointer text-sm md:text-base"
               required
             >
               <option value="">Select Type...</option>
@@ -204,10 +204,10 @@ export default function BeginnerGuide() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-5 rounded-2xl transition-all flex items-center justify-center gap-3 disabled:opacity-50 shadow-xl shadow-emerald-100 active:scale-[0.98]"
+          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 md:py-5 rounded-2xl transition-all flex items-center justify-center gap-3 disabled:opacity-50 shadow-xl shadow-emerald-100 active:scale-[0.98] text-sm md:text-base"
         >
           {loading ? <Loader2 className="animate-spin" /> : <Sprout size={24} />}
-          Generate Personalized Farming Plan
+          Generate Farming Plan
         </button>
       </form>
 
@@ -217,7 +217,7 @@ export default function BeginnerGuide() {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-8"
         >
-          <div className="bg-emerald-600 p-8 sm:p-10 rounded-[2.5rem] text-white relative overflow-hidden shadow-2xl">
+          <div className="bg-emerald-600 p-6 sm:p-10 rounded-[2.5rem] text-white relative overflow-hidden shadow-2xl">
             <div className="absolute top-0 right-0 p-10 opacity-10 rotate-12 pointer-events-none">
               <Sprout size={160} />
             </div>
@@ -235,7 +235,7 @@ export default function BeginnerGuide() {
                 <button
                   onClick={handleSave}
                   disabled={saving || saved}
-                  className={`shrink-0 flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-black transition-all shadow-lg active:scale-95 ${
+                  className={`shrink-0 flex items-center justify-center gap-3 px-6 sm:px-8 py-4 rounded-2xl font-black transition-all shadow-lg active:scale-95 text-sm sm:text-base ${
                     saved 
                     ? "bg-white text-emerald-600" 
                     : "bg-emerald-500 text-white hover:bg-emerald-400 border border-emerald-400"
@@ -247,14 +247,9 @@ export default function BeginnerGuide() {
                 {saved && (
                   <button
                     onClick={() => {
-                      // We need a way to change the tab from here. 
-                      // Since we don't have a global state for activeTab in BeginnerGuide, 
-                      // we might need to pass it down or use a custom event.
-                      // For now, let's just assume the user can switch tabs.
-                      // Actually, I can use window.dispatchEvent or similar if I want to be fancy.
                       window.dispatchEvent(new CustomEvent('changeTab', { detail: 'saved' }));
                     }}
-                    className="shrink-0 flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-black bg-white/20 text-white hover:bg-white/30 transition-all border border-white/30 active:scale-95"
+                    className="shrink-0 flex items-center justify-center gap-3 px-6 sm:px-8 py-4 rounded-2xl font-black bg-white/20 text-white hover:bg-white/30 transition-all border border-white/30 active:scale-95 text-sm sm:text-base"
                   >
                     View Saved Plans
                     <ChevronRight size={20} />
@@ -264,61 +259,61 @@ export default function BeginnerGuide() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="bg-white p-8 sm:p-10 rounded-[2.5rem] shadow-sm border border-stone-200 flex flex-col min-h-[400px]">
-              <h4 className="text-2xl font-black text-stone-900 mb-8 flex items-center gap-3 shrink-0">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            <div className="bg-white p-6 sm:p-10 rounded-[2.5rem] shadow-sm border border-stone-200 flex flex-col min-h-[400px]">
+              <h4 className="text-xl sm:text-2xl font-black text-stone-900 mb-6 sm:mb-8 flex items-center gap-3 shrink-0">
                 <div className="p-2 bg-emerald-100 rounded-xl text-emerald-600">
                   <Calendar size={24} />
                 </div>
                 7-Day Action Plan
               </h4>
-              <div className="space-y-6 flex-1">
+              <div className="space-y-4 sm:space-y-6 flex-1">
                 {result.sevenDayActionPlan.map((step: string, i: number) => (
-                  <div key={i} className="flex gap-6 group min-h-0">
+                  <div key={i} className="flex gap-4 sm:gap-6 group min-h-0">
                     <div className="flex flex-col items-center shrink-0">
-                      <div className="w-10 h-10 rounded-full bg-stone-50 border-2 border-stone-100 flex items-center justify-center font-black text-stone-400 group-hover:border-emerald-500 group-hover:text-emerald-600 transition-colors shrink-0">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-stone-50 border-2 border-stone-100 flex items-center justify-center font-black text-stone-400 group-hover:border-emerald-500 group-hover:text-emerald-600 transition-colors shrink-0 text-sm sm:text-base">
                         {i + 1}
                       </div>
                       {i < result.sevenDayActionPlan.length - 1 && (
                         <div className="w-0.5 flex-1 bg-stone-100 group-hover:bg-emerald-100 transition-colors my-2" />
                       )}
                     </div>
-                    <div className="pb-6 flex-1 min-w-0">
-                      <p className="text-stone-600 leading-relaxed font-medium">{step}</p>
+                    <div className="pb-4 sm:pb-6 flex-1 min-w-0">
+                      <p className="text-stone-600 leading-relaxed font-medium text-sm sm:text-base">{step}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-white p-8 sm:p-10 rounded-[2.5rem] shadow-sm border border-stone-200 flex flex-col min-h-[400px]">
-              <h4 className="text-2xl font-black text-stone-900 mb-8 flex items-center gap-3 shrink-0">
+            <div className="bg-white p-6 sm:p-10 rounded-[2.5rem] shadow-sm border border-stone-200 flex flex-col min-h-[400px]">
+              <h4 className="text-xl sm:text-2xl font-black text-stone-900 mb-6 sm:mb-8 flex items-center gap-3 shrink-0">
                 <div className="p-2 bg-amber-100 rounded-xl text-amber-600">
                   <AlertTriangle size={24} />
                 </div>
                 Common Mistakes
               </h4>
-              <div className="space-y-4 flex-1">
+              <div className="space-y-3 sm:space-y-4 flex-1">
                 {result.commonMistakes.map((mistake: string, i: number) => (
-                  <div key={i} className="flex gap-4 p-6 bg-amber-50/50 rounded-3xl border border-amber-100 shadow-sm">
-                    <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-black shrink-0">
+                  <div key={i} className="flex gap-3 sm:gap-4 p-4 sm:p-6 bg-amber-50/50 rounded-3xl border border-amber-100 shadow-sm">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-black shrink-0 text-xs sm:text-base">
                       !
                     </div>
-                    <p className="text-stone-700 leading-relaxed font-medium flex-1">{mistake}</p>
+                    <p className="text-stone-700 leading-relaxed font-medium flex-1 text-sm sm:text-base">{mistake}</p>
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-10 rounded-[2.5rem] shadow-sm border border-stone-200">
-            <h4 className="text-2xl font-black text-stone-900 mb-8 flex items-center gap-3">
+          <div className="bg-white p-6 sm:p-10 rounded-[2.5rem] shadow-sm border border-stone-200 overflow-hidden">
+            <h4 className="text-xl sm:text-2xl font-black text-stone-900 mb-6 sm:mb-8 flex items-center gap-3">
               <div className="p-2 bg-stone-100 rounded-xl text-stone-600">
                 <Sprout size={24} />
               </div>
               Detailed Farming Plan
             </h4>
-            <div className="prose prose-stone max-w-none prose-p:text-stone-600 prose-p:leading-relaxed prose-li:text-stone-600 prose-headings:text-stone-900 prose-headings:font-black">
+            <div className="prose prose-stone max-w-none prose-p:text-stone-600 prose-p:leading-relaxed prose-li:text-stone-600 prose-headings:text-stone-900 prose-headings:font-black prose-p:text-sm sm:prose-p:text-base">
               <ReactMarkdown>{result.farmingPlan}</ReactMarkdown>
             </div>
           </div>

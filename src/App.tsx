@@ -328,13 +328,13 @@ export default function App() {
 
         {/* Main Content Area */}
         <main className="flex-1 min-h-screen overflow-y-auto">
-          <div className="max-w-5xl mx-auto px-4 sm:px-8 py-8 md:py-12">
-            <header className="mb-10">
-              <div className="flex items-center gap-2 text-xs font-bold text-stone-400 uppercase tracking-[0.2em] mb-3">
-                <span className="w-8 h-px bg-stone-200" />
+          <div className="max-w-5xl mx-auto px-4 sm:px-8 py-6 md:py-12">
+            <header className="mb-8 md:mb-10">
+              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold text-stone-400 uppercase tracking-[0.2em] mb-2 md:mb-3">
+                <span className="w-6 md:w-8 h-px bg-stone-200" />
                 {tabs.find(t => t.id === activeTab)?.label}
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-stone-900 tracking-tight mb-4">
+              <h2 className="text-3xl md:text-5xl font-bold text-stone-900 tracking-tight mb-3 md:mb-4">
                 {activeTab === 'beginner' && "Start Your Journey"}
                 {activeTab === 'irrigation' && "Smart Irrigation"}
                 {activeTab === 'suitability' && "Crop Suitability"}
@@ -343,7 +343,7 @@ export default function App() {
                 {activeTab === 'market' && "Market Advisor"}
                 {activeTab === 'saved' && "Saved Plans"}
               </h2>
-              <p className="text-lg text-stone-500 max-w-2xl leading-relaxed">
+              <p className="text-base md:text-lg text-stone-500 max-w-2xl leading-relaxed">
                 {activeTab === 'beginner' && "Get a personalized farming plan tailored to your land and goals."}
                 {activeTab === 'irrigation' && "Optimize your water usage with real-time weather-based advice."}
                 {activeTab === 'suitability' && "Find out which crops will thrive in your specific location."}
