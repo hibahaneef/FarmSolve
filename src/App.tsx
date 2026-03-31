@@ -64,6 +64,14 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
+    const handleTabChange = (e: any) => {
+      if (e.detail) setActiveTab(e.detail);
+    };
+    window.addEventListener('changeTab', handleTabChange);
+    return () => window.removeEventListener('changeTab', handleTabChange);
+  }, []);
+
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         // Sync user to Firestore

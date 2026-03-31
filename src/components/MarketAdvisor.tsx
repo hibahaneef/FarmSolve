@@ -8,6 +8,7 @@ import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianG
 export default function MarketAdvisor() {
   const [crop, setCrop] = useState("");
   const [location, setLocation] = useState("");
+  const [locationData, setLocationData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<any | null>(null);
@@ -51,7 +52,10 @@ export default function MarketAdvisor() {
           <LocationSelector
             label="Location"
             value={location}
-            onChange={setLocation}
+            onChange={(val, data) => {
+              setLocation(val);
+              if (data) setLocationData(data);
+            }}
             color="indigo"
           />
         </div>

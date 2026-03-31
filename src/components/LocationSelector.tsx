@@ -3,10 +3,18 @@ import { MapPin } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import MapPicker from "./MapPicker";
 
+interface LocationData {
+  village: string;
+  district: string;
+  state: string;
+  lat: number;
+  lng: number;
+}
+
 interface LocationSelectorProps {
   label: string;
   value: string;
-  onChange: (location: string) => void;
+  onChange: (location: string, data?: LocationData) => void;
   required?: boolean;
   color?: string;
 }
@@ -20,9 +28,9 @@ export default function LocationSelector({
 }: LocationSelectorProps) {
   const [isMapOpen, setIsMapOpen] = useState(false);
 
-  const handleLocationSelect = (data: { village: string; district: string; state: string; lat: number; lng: number }) => {
+  const handleLocationSelect = (data: LocationData) => {
     const locationString = `${data.village ? data.village + ", " : ""}${data.district}, ${data.state}`;
-    onChange(locationString);
+    onChange(locationString, data);
     setIsMapOpen(false);
   };
 

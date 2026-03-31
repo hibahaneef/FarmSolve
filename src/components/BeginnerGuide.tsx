@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { generateFarmingGuide } from "../services/geminiService";
 import ReactMarkdown from "react-markdown";
-import { Loader2, Sprout, Calendar, AlertTriangle, CheckCircle2, Save, BookmarkCheck, MapPin } from "lucide-react";
+import { Loader2, Sprout, Calendar, AlertTriangle, CheckCircle2, Save, BookmarkCheck, MapPin, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { db, collection, addDoc, serverTimestamp, auth, OperationType, handleFirestoreError } from "../firebase";
 import LocationSelector from "./LocationSelector";
 
 export default function BeginnerGuide() {
   const [location, setLocation] = useState("");
+  const [locationData, setLocationData] = useState<any>(null);
   const [landSize, setLandSize] = useState("");
   const [landUnit, setLandUnit] = useState("Acres");
   const [soilType, setSoilType] = useState("");
@@ -59,6 +60,7 @@ export default function BeginnerGuide() {
       await addDoc(collection(db, "plans"), {
         uid: auth.currentUser.uid,
         location,
+        locationData,
         bestCrop: result.bestCrop,
         farmingPlan: result.farmingPlan,
         sevenDayActionPlan: result.sevenDayActionPlan,
@@ -87,7 +89,10 @@ export default function BeginnerGuide() {
         <LocationSelector
           label="Farm Location"
           value={location}
-          onChange={setLocation}
+          onChange={(val, data) => {
+            setLocation(val);
+            if (data) setLocationData(data);
+          }}
           color="emerald"
         />
 
@@ -226,18 +231,36 @@ export default function BeginnerGuide() {
                 </div>
                 <h3 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight truncate">{result.bestCrop}</h3>
               </div>
-              <button
-                onClick={handleSave}
-                disabled={saving || saved}
-                className={`shrink-0 flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-black transition-all shadow-lg active:scale-95 ${
-                  saved 
-                  ? "bg-white text-emerald-600" 
-                  : "bg-emerald-500 text-white hover:bg-emerald-400 border border-emerald-400"
-                }`}
-              >
-                {saving ? <Loader2 className="animate-spin" size={20} /> : saved ? <CheckCircle2 size={20} /> : <Save size={20} />}
-                {saved ? "Saved to Profile" : "Save Plan"}
-              </button>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button
+                  onClick={handleSave}
+                  disabled={saving || saved}
+                  className={`shrink-0 flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-black transition-all shadow-lg active:scale-95 ${
+                    saved 
+                    ? "bg-white text-emerald-600" 
+                    : "bg-emerald-500 text-white hover:bg-emerald-400 border border-emerald-400"
+                  }`}
+                >
+                  {saving ? <Loader2 className="animate-spin" size={20} /> : saved ? <CheckCircle2 size={20} /> : <Save size={20} />}
+                  {saved ? "Saved to Profile" : "Save Plan"}
+                </button>
+                {saved && (
+                  <button
+                    onClick={() => {
+                      // We need a way to change the tab from here. 
+                      // Since we don't have a global state for activeTab in BeginnerGuide, 
+                      // we might need to pass it down or use a custom event.
+                      // For now, let's just assume the user can switch tabs.
+                      // Actually, I can use window.dispatchEvent or similar if I want to be fancy.
+                      window.dispatchEvent(new CustomEvent('changeTab', { detail: 'saved' }));
+                    }}
+                    className="shrink-0 flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-black bg-white/20 text-white hover:bg-white/30 transition-all border border-white/30 active:scale-95"
+                  >
+                    View Saved Plans
+                    <ChevronRight size={20} />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 

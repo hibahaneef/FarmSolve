@@ -6,6 +6,7 @@ import LocationSelector from "./LocationSelector";
 
 export default function CropSuitability() {
   const [location, setLocation] = useState("");
+  const [locationData, setLocationData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<any[] | null>(null);
@@ -38,7 +39,10 @@ export default function CropSuitability() {
           <LocationSelector
             label="Farm Location"
             value={location}
-            onChange={setLocation}
+            onChange={(val, data) => {
+              setLocation(val);
+              if (data) setLocationData(data);
+            }}
             color="emerald"
           />
           <button

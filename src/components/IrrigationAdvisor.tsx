@@ -7,6 +7,7 @@ import LocationSelector from "./LocationSelector";
 export default function IrrigationAdvisor() {
   const [crop, setCrop] = useState("");
   const [location, setLocation] = useState("");
+  const [locationData, setLocationData] = useState<any>(null);
   const [targetDate, setTargetDate] = useState("today");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,31 +21,34 @@ export default function IrrigationAdvisor() {
     setError(null);
     try {
       let weatherData;
+      const queryParams = locationData 
+        ? `lat=${locationData.lat}&lon=${locationData.lng}`
+        : `city=${encodeURIComponent(location)}`;
+
       if (targetDate === "today") {
-        const weatherRes = await fetch(`/api/weather?city=${location}`);
+        const weatherRes = await fetch(`/api/weather?${queryParams}`);
         weatherData = await weatherRes.json();
       } else {
-        const forecastRes = await fetch(`/api/forecast?city=${location}`);
+        const forecastRes = await fetch(`/api/forecast?${queryParams}`);
         const forecastData = await forecastRes.json();
         
-        if (forecastData.list) {
+        if (forecastData.list && forecastData.list.length > 0) {
           // Find forecast for tomorrow (roughly 8 intervals of 3 hours = 24 hours)
-          // Or just find the one closest to +24h
           const tomorrow = new Date();
           tomorrow.setDate(tomorrow.getDate() + 1);
           const tomorrowTimestamp = tomorrow.getTime() / 1000;
           
-          weatherData = forecastData.list.reduce((prev: any, curr: any) => {
+          const closestForecast = forecastData.list.reduce((prev: any, curr: any) => {
             return Math.abs(curr.dt - tomorrowTimestamp) < Math.abs(prev.dt - tomorrowTimestamp) ? curr : prev;
           });
           
           // Format it to look like current weather response for the AI
           weatherData = {
-            ...weatherData,
-            name: forecastData.city.name,
-            main: weatherData.main,
-            wind: weatherData.wind,
-            weather: weatherData.weather
+            ...closestForecast,
+            name: forecastData.city?.name || location,
+            main: closestForecast.main,
+            wind: closestForecast.wind,
+            weather: closestForecast.weather
           };
         } else {
           weatherData = forecastData;
@@ -53,8 +57,9 @@ export default function IrrigationAdvisor() {
       
       setWeather(weatherData);
 
-      if (weatherData.error) {
-        setError(weatherData.error);
+      // Handle both server errors and OpenWeatherMap errors
+      if (weatherData.error || (weatherData.cod && weatherData.cod !== 200 && weatherData.cod !== "200")) {
+        setError(weatherData.message || weatherData.error || "Failed to fetch weather data. Please check your location.");
         setLoading(false);
         return;
       }
@@ -91,9 +96,13 @@ export default function IrrigationAdvisor() {
             />
           </div>
           <LocationSelector
-            label="Location (City)"
+            label="Location"
             value={location}
-            onChange={setLocation}
+            onChange={(val, data) => {
+              setLocation(val);
+              if (data) setLocationData(data);
+              else setLocationData(null);
+            }}
             color="blue"
           />
           <div className="space-y-2">
@@ -143,7 +152,7 @@ export default function IrrigationAdvisor() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {weather && !weather.error && (
+            {weather && weather.main && (
               <>
                 <div className="bg-white p-6 rounded-3xl border border-stone-200 flex items-center gap-4 hover:shadow-md transition-shadow">
                   <div className="p-3 bg-orange-50 rounded-2xl text-orange-500">
@@ -169,7 +178,7 @@ export default function IrrigationAdvisor() {
                   </div>
                   <div>
                     <p className="text-[10px] text-stone-400 uppercase font-black tracking-widest">Wind Speed</p>
-                    <p className="text-xl font-black text-stone-900">{weather.wind.speed} m/s</p>
+                    <p className="text-xl font-black text-stone-900">{weather.wind?.speed || 0} m/s</p>
                   </div>
                 </div>
               </>
