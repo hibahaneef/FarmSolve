@@ -27,16 +27,16 @@ export default function CropSuitability() {
 
   return (
     <div className="space-y-8">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-4">
+      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-3xl shadow-sm border border-stone-200 space-y-6">
         {error && (
-          <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-red-600 text-sm flex items-center gap-2">
+          <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-sm flex items-center gap-2">
             <Sprout size={18} />
             {error}
           </div>
         )}
-        <div className="space-y-4">
+        <div className="space-y-6">
           <LocationSelector
-            label="Location"
+            label="Farm Location"
             value={location}
             onChange={setLocation}
             color="emerald"
@@ -44,38 +44,38 @@ export default function CropSuitability() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 shadow-lg shadow-emerald-100 active:scale-[0.98]"
           >
             {loading ? <Loader2 className="animate-spin" /> : <MapPin size={20} />}
-            Find Crops
+            Find Suitable Crops
           </button>
         </div>
       </form>
 
       {result && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {result.map((crop: any, i: number) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 hover:border-emerald-200 transition-all group"
+              className="bg-white p-8 rounded-3xl shadow-sm border border-stone-200 hover:border-emerald-200 transition-all group hover:shadow-xl hover:shadow-emerald-50/50 flex flex-col"
             >
-              <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-all">
-                <Sprout size={24} />
+              <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-all group-hover:scale-110 group-hover:rotate-3 shadow-sm">
+                <Sprout size={28} />
               </div>
-              <h3 className="font-bold text-lg text-stone-900 mb-2">{crop.cropName}</h3>
-              <p className="text-sm text-stone-600 mb-4 line-clamp-3">{crop.reasons}</p>
+              <h3 className="font-black text-2xl text-stone-900 mb-3 group-hover:text-emerald-700 transition-colors">{crop.cropName}</h3>
+              <p className="text-sm text-stone-600 mb-6 leading-relaxed flex-1">{crop.reasons}</p>
               
-              <div className="space-y-2">
-                <p className="text-xs font-bold uppercase text-stone-400 tracking-wider">Ideal Seasons</p>
+              <div className="space-y-4 pt-6 border-t border-stone-100">
+                <p className="text-[10px] font-black uppercase text-stone-400 tracking-[0.2em]">Ideal Seasons</p>
                 <div className="flex flex-wrap gap-2">
                   {crop.idealSeasons.map((season: string, j: number) => (
-                    <span key={j} className="text-xs bg-stone-100 text-stone-600 px-2 py-1 rounded-md flex items-center gap-1">
-                      {season.toLowerCase().includes('summer') && <Sun size={12} />}
-                      {season.toLowerCase().includes('monsoon') && <Cloud size={12} />}
-                      {season.toLowerCase().includes('winter') && <Wind size={12} />}
+                    <span key={j} className="text-xs font-bold bg-stone-50 text-stone-600 px-3 py-1.5 rounded-xl flex items-center gap-2 border border-stone-100 group-hover:border-emerald-100 group-hover:bg-emerald-50/50 transition-colors">
+                      {season.toLowerCase().includes('summer') && <Sun size={14} className="text-orange-500" />}
+                      {season.toLowerCase().includes('monsoon') && <Cloud size={14} className="text-blue-500" />}
+                      {season.toLowerCase().includes('winter') && <Wind size={14} className="text-stone-400" />}
                       {season}
                     </span>
                   ))}

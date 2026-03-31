@@ -162,170 +162,220 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={{ user, loading, login, logout }}>
-      <div className="min-h-screen bg-stone-50 font-sans text-stone-900">
-        {/* Header */}
-        <header className="bg-white border-b border-stone-200 sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <div className="flex items-center gap-2">
-                <div className="bg-emerald-600 p-2 rounded-xl">
-                  <Sprout className="text-white" size={24} />
-                </div>
-                <h1 className="text-xl font-bold tracking-tight text-stone-900">
-                  farmsolve
-                </h1>
-              </div>
+      <div className="min-h-screen bg-stone-50 font-sans text-stone-900 flex flex-col md:flex-row">
+        {/* Sidebar Navigation (Desktop) */}
+        <aside className="hidden md:flex flex-col w-72 bg-white border-r border-stone-200 sticky top-0 h-screen z-50">
+          <div className="p-6 flex items-center gap-3 border-b border-stone-100">
+            <div className="bg-emerald-600 p-2.5 rounded-xl shadow-lg shadow-emerald-100">
+              <Sprout className="text-white" size={24} />
+            </div>
+            <h1 className="text-xl font-bold tracking-tight text-stone-900">
+              farmsolve
+            </h1>
+          </div>
 
-              {/* Desktop Navigation */}
-              <nav className="hidden md:flex gap-1">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
-                      activeTab === tab.id
-                        ? "bg-emerald-50 text-emerald-700"
-                        : "text-stone-500 hover:bg-stone-100"
-                    }`}
-                  >
-                    <tab.icon size={18} />
-                    {tab.label}
-                  </button>
-                ))}
-              </nav>
-
-              {/* User Profile / Logout */}
-              <div className="hidden md:flex items-center gap-4 ml-4 pl-4 border-l border-stone-200">
-                <div className="flex items-center gap-2">
-                  {user.photoURL ? (
-                    <img src={user.photoURL} alt={user.displayName || ""} className="w-8 h-8 rounded-full border border-stone-200" />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-500">
-                      <UserIcon size={16} />
-                    </div>
-                  )}
-                  <span className="text-sm font-semibold text-stone-700 max-w-[100px] truncate">
-                    {user.displayName?.split(' ')[0]}
-                  </span>
-                </div>
-                <button 
-                  onClick={logout}
-                  className="p-2 text-stone-400 hover:text-red-500 transition-colors"
-                  title="Logout"
-                >
-                  <LogOut size={20} />
-                </button>
-              </div>
-
-              {/* Mobile Menu Toggle */}
-              <button 
-                className="md:hidden p-2 text-stone-500"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
+          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`w-full px-4 py-3 rounded-xl text-sm font-semibold transition-all flex items-center gap-3 group relative ${
+                  activeTab === tab.id
+                    ? "bg-emerald-50 text-emerald-700 shadow-sm"
+                    : "text-stone-500 hover:bg-stone-50 hover:text-stone-900"
+                }`}
               >
-                {isMenuOpen ? <X /> : <Menu />}
+                <tab.icon size={20} className={activeTab === tab.id ? "text-emerald-600" : "text-stone-400 group-hover:text-stone-600"} />
+                {tab.label}
+                {activeTab === tab.id && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute left-0 w-1 h-6 bg-emerald-600 rounded-r-full"
+                  />
+                )}
+              </button>
+            ))}
+          </nav>
+
+          <div className="p-4 border-t border-stone-100">
+            <div className="bg-stone-50 p-4 rounded-2xl space-y-4">
+              <div className="flex items-center gap-3">
+                {user.photoURL ? (
+                  <img src={user.photoURL} alt={user.displayName || ""} className="w-10 h-10 rounded-full border-2 border-white shadow-sm" />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-stone-200 flex items-center justify-center text-stone-500">
+                    <UserIcon size={20} />
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-stone-900 truncate">{user.displayName}</p>
+                  <p className="text-xs text-stone-500 truncate">{user.email}</p>
+                </div>
+              </div>
+              <button 
+                onClick={logout}
+                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold text-red-600 bg-red-50 hover:bg-red-100 transition-colors"
+              >
+                <LogOut size={18} />
+                Sign Out
               </button>
             </div>
           </div>
+        </aside>
+
+        {/* Mobile Header */}
+        <header className="md:hidden bg-white border-b border-stone-200 sticky top-0 z-50 px-4 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="bg-emerald-600 p-1.5 rounded-lg">
+              <Sprout className="text-white" size={18} />
+            </div>
+            <h1 className="text-lg font-bold tracking-tight text-stone-900">
+              farmsolve
+            </h1>
+          </div>
+          <button 
+            className="p-2 text-stone-500 hover:bg-stone-50 rounded-lg transition-colors"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </header>
 
         {/* Mobile Navigation Drawer */}
         <AnimatePresence>
           {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, x: "100%" }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: "100%" }}
-              className="fixed inset-0 z-40 md:hidden bg-white pt-16"
-            >
-              <div className="p-4 border-b border-stone-100 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  {user.photoURL ? (
-                    <img src={user.photoURL} alt={user.displayName || ""} className="w-10 h-10 rounded-full border border-stone-200" />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center text-stone-500">
-                      <UserIcon size={20} />
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsMenuOpen(false)}
+                className="fixed inset-0 bg-stone-900/20 backdrop-blur-sm z-40 md:hidden"
+              />
+              <motion.div
+                initial={{ x: "-100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "-100%" }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                className="fixed inset-y-0 left-0 w-80 bg-white z-50 md:hidden flex flex-col shadow-2xl"
+              >
+                <div className="p-6 flex items-center justify-between border-b border-stone-100">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-emerald-600 p-2 rounded-xl">
+                      <Sprout className="text-white" size={20} />
                     </div>
-                  )}
-                  <div>
-                    <p className="font-bold text-stone-900">{user.displayName}</p>
-                    <p className="text-xs text-stone-500">{user.email}</p>
+                    <h1 className="text-xl font-bold text-stone-900">farmsolve</h1>
                   </div>
-                </div>
-                <button 
-                  onClick={logout}
-                  className="p-2 text-red-500"
-                >
-                  <LogOut size={20} />
-                </button>
-              </div>
-              <div className="p-4 space-y-2">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => {
-                      setActiveTab(tab.id);
-                      setIsMenuOpen(false);
-                    }}
-                    className={`w-full p-4 rounded-2xl text-left flex items-center justify-between group ${
-                      activeTab === tab.id
-                        ? "bg-emerald-50 text-emerald-700"
-                        : "text-stone-600 hover:bg-stone-50"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <tab.icon size={20} />
-                      <span className="font-semibold">{tab.label}</span>
-                    </div>
-                    <ChevronRight size={18} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <button onClick={() => setIsMenuOpen(false)} className="p-2 text-stone-400">
+                    <X size={20} />
                   </button>
-                ))}
-              </div>
-            </motion.div>
+                </div>
+
+                <div className="flex-1 p-4 space-y-1 overflow-y-auto">
+                  {tabs.map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => {
+                        setActiveTab(tab.id);
+                        setIsMenuOpen(false);
+                      }}
+                      className={`w-full p-4 rounded-2xl text-left flex items-center gap-4 transition-all ${
+                        activeTab === tab.id
+                          ? "bg-emerald-50 text-emerald-700 font-bold"
+                          : "text-stone-600 hover:bg-stone-50"
+                      }`}
+                    >
+                      <tab.icon size={20} className={activeTab === tab.id ? "text-emerald-600" : "text-stone-400"} />
+                      <span>{tab.label}</span>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="p-6 border-t border-stone-100">
+                  <div className="flex items-center gap-3 mb-6">
+                    {user.photoURL ? (
+                      <img src={user.photoURL} alt={user.displayName || ""} className="w-12 h-12 rounded-full border-2 border-white shadow-md" />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center text-stone-500">
+                        <UserIcon size={24} />
+                      </div>
+                    )}
+                    <div>
+                      <p className="font-bold text-stone-900">{user.displayName}</p>
+                      <p className="text-xs text-stone-500">{user.email}</p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={logout}
+                    className="w-full py-3 rounded-2xl bg-red-50 text-red-600 font-bold flex items-center justify-center gap-2"
+                  >
+                    <LogOut size={20} />
+                    Sign Out
+                  </button>
+                </div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
 
-        {/* Main Content */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-stone-900 tracking-tight">
-              {tabs.find(t => t.id === activeTab)?.label}
-            </h2>
-            <p className="text-stone-500 mt-1">
-              {activeTab === 'beginner' && "Start your farming journey with a personalized plan."}
-              {activeTab === 'irrigation' && "Smart watering recommendations based on real-time weather."}
-              {activeTab === 'suitability' && "Discover the best crops for your specific location."}
-              {activeTab === 'disease' && "Identify and treat crop diseases before they spread."}
-              {activeTab === 'health' && "Optimize your crop yield with expert nutrient advice."}
-              {activeTab === 'market' && "Make informed decisions on when to sell for maximum profit."}
-              {activeTab === 'saved' && "Access and manage your previously generated farming plans."}
-            </p>
+        {/* Main Content Area */}
+        <main className="flex-1 min-h-screen overflow-y-auto">
+          <div className="max-w-5xl mx-auto px-4 sm:px-8 py-8 md:py-12">
+            <header className="mb-10">
+              <div className="flex items-center gap-2 text-xs font-bold text-stone-400 uppercase tracking-[0.2em] mb-3">
+                <span className="w-8 h-px bg-stone-200" />
+                {tabs.find(t => t.id === activeTab)?.label}
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-stone-900 tracking-tight mb-4">
+                {activeTab === 'beginner' && "Start Your Journey"}
+                {activeTab === 'irrigation' && "Smart Irrigation"}
+                {activeTab === 'suitability' && "Crop Suitability"}
+                {activeTab === 'disease' && "Disease Diagnosis"}
+                {activeTab === 'health' && "Crop Health"}
+                {activeTab === 'market' && "Market Advisor"}
+                {activeTab === 'saved' && "Saved Plans"}
+              </h2>
+              <p className="text-lg text-stone-500 max-w-2xl leading-relaxed">
+                {activeTab === 'beginner' && "Get a personalized farming plan tailored to your land and goals."}
+                {activeTab === 'irrigation' && "Optimize your water usage with real-time weather-based advice."}
+                {activeTab === 'suitability' && "Find out which crops will thrive in your specific location."}
+                {activeTab === 'disease' && "Identify plant diseases instantly and get effective treatments."}
+                {activeTab === 'health' && "Boost your yield with expert nutrient and fertilizer guidance."}
+                {activeTab === 'market' && "Analyze market trends to maximize your profit on every harvest."}
+                {activeTab === 'saved' && "Manage and review your previously generated farming strategies."}
+              </p>
+            </header>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                {renderContent()}
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
-            >
-              {renderContent()}
-            </motion.div>
-          </AnimatePresence>
-        </main>
-
-        {/* Footer */}
-        <footer className="bg-white border-t border-stone-200 py-12 mt-12">
-          <div className="max-w-7xl mx-auto px-4 text-center">
-            <div className="flex justify-center items-center gap-2 mb-4">
-              <Sprout className="text-emerald-600" size={20} />
-              <span className="font-bold text-stone-900">farmsolve</span>
+          <footer className="max-w-5xl mx-auto px-4 sm:px-8 py-12 border-t border-stone-200 mt-12">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+              <div className="flex items-center gap-2">
+                <Sprout className="text-emerald-600" size={20} />
+                <span className="font-bold text-stone-900 tracking-tight">farmsolve</span>
+              </div>
+              <p className="text-stone-400 text-sm">
+                &copy; 2026 farmsolve. Empowering sustainable agriculture.
+              </p>
+              <div className="flex gap-6">
+                <a href="#" className="text-xs font-bold text-stone-400 hover:text-emerald-600 transition-colors uppercase tracking-widest">Privacy</a>
+                <a href="#" className="text-xs font-bold text-stone-400 hover:text-emerald-600 transition-colors uppercase tracking-widest">Terms</a>
+                <a href="#" className="text-xs font-bold text-stone-400 hover:text-emerald-600 transition-colors uppercase tracking-widest">Support</a>
+              </div>
             </div>
-            <p className="text-stone-500 text-sm">
-              Empowering farmers with AI-driven insights for a sustainable future.
-            </p>
-          </div>
-        </footer>
+          </footer>
+        </main>
       </div>
     </AuthContext.Provider>
   );

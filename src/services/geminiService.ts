@@ -144,9 +144,20 @@ export async function generateMarketAdvice(crop: string, location: string) {
           marketTrend: { type: Type.STRING },
           sellNowOrWait: { type: Type.STRING, enum: ["Sell Now", "Wait"] },
           bestTiming: { type: Type.STRING },
-          profitAdvice: { type: Type.STRING }
+          profitAdvice: { type: Type.STRING },
+          priceHistory: {
+            type: Type.ARRAY,
+            items: {
+              type: Type.OBJECT,
+              properties: {
+                month: { type: Type.STRING },
+                price: { type: Type.NUMBER }
+              },
+              required: ["month", "price"]
+            }
+          }
         },
-        required: ["marketTrend", "sellNowOrWait", "bestTiming", "profitAdvice"]
+        required: ["marketTrend", "sellNowOrWait", "bestTiming", "profitAdvice", "priceHistory"]
       }
     }
   });
